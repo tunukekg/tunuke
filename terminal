@@ -1,0 +1,3 @@
+firewall-cmd --zone=public --add-port=5000/tcp
+
+pscp -i c:/Users/Maks/Desktop/ssh-tunuke.ppk c:/Users/Maks/Desktop/server/server.zip  opc@130.61.51.77:/home/opc/
