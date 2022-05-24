@@ -51,11 +51,9 @@ TEST_QUESTIONS = {
     "social": "Соц-сети"
 }
 
-app.get('/api/leads', (req, res) => {
-    const leads = Database.getLeads();
-
+app.get('/api', (req, res) => {
     res.json({
-        leads, status: 200
+        status: 'Server is running'
     });
 });
 
@@ -81,6 +79,7 @@ app.post('/api/form', (req,res) => {
         status: 200
     });
 });
+
 
 const port = process.env.PORT || 5000;
 
