@@ -1,5 +1,4 @@
 const express = require('express');
-const AmoCRM = require('amocrm-js');
 const cors = require('cors');
 const fs = require('fs');
 const bodyParser = require('body-parser');
@@ -11,13 +10,29 @@ const DB = require('./database');
 const app = express();
 const Database = new DB();
 const bot = new TGbot('5334206041:AAGh5_thgBbu4wO04P9laxKjlfeLeYHy8_4', {polling: true});
-let CHAT_ID = '650567115';
 
 app.use(cors());
 app.use(bodyParser.json())
 
 bot.on('message', (msg) => {
-    CHAT_ID = msg.chat.id;
+    // console.log(msg)
+
+    const [command, value] = msg.text.split(' ');
+
+    switch (command) {
+        case "/start":
+            bot.sendMessage(msg.chat.id, 'Пожалуйста войдите в систему.');
+            break;
+        
+        case "/login":
+            if(Database.getCrmPassword() === value) {
+                const newUser = Database.addCrmUser(msg.chat);
+
+                bot.sendMessage(msg.chat.id, 'Здравствуйте, вы вошли в систему!');
+            }
+            else bot.sendMessage(msg.chat.id, 'Неверный пароль');
+            break;
+    }
 });
 
 app.use((req, res, next) => {
@@ -38,7 +53,7 @@ const categories = {
     "type-object": 'Дата заказа?',
     "payment": "Рассчитывать доборные элементы?",
     "installation": "Нужен ли монтаж?",
-    "social": "Соц-сети"
+    "social": "Как связаться"
 }
 
 TEST_QUESTIONS = {
@@ -48,7 +63,7 @@ TEST_QUESTIONS = {
     "type-object": 'Дата заказа?',
     "payment": "Рассчитывать доборные элементы?",
     "installation": "Нужен ли монтаж?",
-    "social": "Соц-сети"
+    "social": "Как связаться"
 }
 
 app.get('/api', (req, res) => {
@@ -67,7 +82,9 @@ app.post('/api/form', (req,res) => {
     });
 
     try {
-        bot.sendMessage(CHAT_ID, message);
+        Database.getCrmUsers().forEach((user) => {
+            bot.sendMessage(user.id, message);
+        });
     } catch(err) {
         console.log(err)
         res.json({status: 500});

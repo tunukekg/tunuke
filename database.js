@@ -18,6 +18,36 @@ class Database {
         this.database = json;
     }
 
+    getCrmUsers() {
+        return this.database.users;
+    }
+
+    loginCrmUser(id) {
+        let loggedIn = false;
+
+        this.database.users.forEach(user => {
+            if(user.id === id) {
+                loggedIn = true;
+            } 
+        });
+
+        return loggedIn;
+    }
+
+    addCrmUser(user) {
+        const isAlreadyExists = this.database.users.filter(item => item.id === user.id).length;
+        if(isAlreadyExists) return false;
+
+        this.database.users.push(user);
+        this.updateDatabase();
+
+        return user;
+    }
+    
+    getCrmPassword() {
+        return this.database.crm_password;
+    }
+
     updateDatabase(data) {
         fs.writeFileSync('database.json', JSON.stringify(this.database));
     }
