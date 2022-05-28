@@ -66,6 +66,12 @@ TEST_QUESTIONS = {
     "social": "Как связаться"
 }
 
+app.get('/', (req, res) => {
+    res.json({
+        status: 'Server is running'
+    });
+});
+
 app.get('/api', (req, res) => {
     res.json({
         status: 'Server is running'
