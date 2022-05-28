@@ -53,7 +53,9 @@ const categories = {
     "type-object": 'Дата заказа?',
     "payment": "Рассчитывать доборные элементы?",
     "installation": "Нужен ли монтаж?",
-    "social": "Как связаться"
+    "social": "Как связаться",
+    "type-of-material": "Материал",
+    "range": "Площадь"
 }
 
 TEST_QUESTIONS = {
